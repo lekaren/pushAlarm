@@ -30,11 +30,11 @@ const handlePushTokens = (message) => {
             data: {message}
         });
     } 
-    let chunks = expo.chuckPushNotifications(notifications);
+    let chunks = expo.chunkPushNotifications(notifications);
     (async () => {
         for (let chunk of chunks) {
             try {
-                let reseipts = await expo.sendPushNotificationAsync(chunk);
+                let reseipts = await expo.sendPushNotificationsAsync(chunk);
                 console.log(reseipts);
             } catch (error) {
                 console.error(error);
