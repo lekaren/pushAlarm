@@ -4,14 +4,14 @@ import Expo from 'expo-server-sdk';
 const app = express();
 const expo = new Expo();
 
-let savedPushTokens = [];
-const PROT_NUMBER = 3000;
+const savedPushTokens = [];
+const PORT_NUMBER = 3000;
 
 const saveToken = (token) => {
-    if (savedPushTokens.indexOf(token) === -1) {
+    if (savedPushTokens.indexOf(token === -1)) {
         savedPushTokens.push(token);
     }
-}
+};
 
 const handlePushTokens = (message) => {
     let notifications = [];
@@ -30,11 +30,11 @@ const handlePushTokens = (message) => {
             data: {message}
         });
     } 
-    let chunks = expo.chuckPushNotifications(notifications);
+    let chunks = expo.chunkPushNotifications(notifications);
     (async () => {
         for (let chunk of chunks) {
             try {
-                let reseipts = await expo.sendPushNotificationAsync(chunk);
+                let reseipts = await expo.sendPushNotificationsAsync(chunk);
                 console.log(reseipts);
             } catch (error) {
                 console.error(error);
@@ -52,7 +52,7 @@ app.get('/', (req, res) => {
 app.post('/token', (req, res) => {
     saveToken(req.body.token.value);
     console.log('토큰 저장됨');
-    res.send(`토큰이 저장되었습니다. ${req.body.token.value}`);
+    console.log(`토큰이 저장되었습니다. ${req.body.token.value}`);
 });
 
 app.post('/message', (req, res) => {
@@ -61,6 +61,6 @@ app.post('/message', (req, res) => {
     res.send(`메시지를 전송합니다. ${req.body.message}`);
 });
 
-app.listen(PROT_NUMBER, () => {
+app.listen(PORT_NUMBER, () => {
     console.log('3000번 포트로 서버 실행');
 })

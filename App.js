@@ -4,8 +4,8 @@ import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 
-const PUSH_REGISTRATION_ENDPOINT = ' http://1e71a771a642.ngrok.io/token';
-const MESSAGE_ENPOINT = ' http://1e71a771a642.ngrok.io/message';
+const PUSH_REGISTRATION_ENDPOINT = 'http://4a5c987bcc3c.ngrok.io/token';
+const MESSAGE_ENPOINT = 'http://4a5c987bcc3c.ngrok.io/message';
 
 export default function App() {
 
@@ -20,7 +20,7 @@ export default function App() {
       return;
     }
 
-    const token = await Notifications.getExpoPushTokenAsync();
+    let token = await Notifications.getExpoPushTokenAsync();
 
     return axios.post(PUSH_REGISTRATION_ENDPOINT, {
       token: {
@@ -32,19 +32,15 @@ export default function App() {
       }
     });
     const notificationSubscription = Notifications.addListener(handleNotification);
-  }
+  };
 
   const handleNotification = (notification) => {
     setState({ notification });
-  }
-
-  useEffect(() => {
-    registerForPushNotificationsAsync();
-  }, []);
+  };
 
   const handleChangeText = (text) => {
     setState({ messageText: text });
-  }
+  };
 
   const sendMessage = async () => {
     axios.post(MESSAGE_ENPOINT, {
@@ -52,7 +48,11 @@ export default function App() {
     });
 
     setState({ messageText: '' });
-  }
+  };
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -63,8 +63,7 @@ export default function App() {
       />
       <TouchableOpacity
         style={styles.button}
-        onPress={sendMessage}
-      >
+        onPress={sendMessage}>
         <Text style={styles.buttonText}>SEND</Text>
       </TouchableOpacity>
       { state.notification ? renderNotification() : null }
